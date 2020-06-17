@@ -40,6 +40,7 @@ INSTALLED_APPS = [
 
     # app
     'polls',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
