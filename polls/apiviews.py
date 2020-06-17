@@ -1,19 +1,25 @@
-from rest_framework.views import APIView
+# from rest_framework.views import APIView
+from rest_framework import generics
 from rest_framework.response import Response, Serializer
 from django.shortcuts import get_object_or_404
 from .models import Poll, Choice
 from .serializers import PollSerializer, ChoiceSerializer, VoteSerializer
 
 
-class PollList(APIView):
-    def get(self, request):
-        polls = Poll.objects.all()[:20]
-        data = PollSerializer(polls, many=True).data
-        return Response(data)
+class PollList(generics.ListAPIView):
+    serializer_class = PollSerializer
+    queryset = Poll.objects.all()
 
 
-class PollDetail(APIView):
-    def get(self, request, pk):
-        polls = get_object_or_404(Poll, pk=pk)
-        data = PollSerializer(polls).data
-        return Response(data)
+class PollDetail(generics.RetrieveDestroyAPIView):
+    serializer_class = PollSerializer
+    queryset = Poll.objects.all()
+
+
+class ChoiceList(generics.ListCreateAPIView):
+    queryset = Choice.objects.all()
+    serializer_class = ChoiceSerializer
+
+
+class CreateVote(generics.CreateAPIView):
+    serializer_class = VoteSerializer
